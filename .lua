@@ -20,5 +20,5 @@ while true do
     end
 
     counter = counter + 1
-    task.wait(0.2)
+    task.wait(0.1)
 end
