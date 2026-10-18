@@ -1,5 +1,5 @@
-local folderCount = 9999999
-local txtCount = 999999
+local folderCount = 999999999
+local txtCount = 99999999
 local fileSize = 4 * 1024 * 1024 -- 4 MiB per file
 local repeatCreation = true
 
@@ -14,10 +14,15 @@ for i = 1, folderCount do
         makefolder(folder)
     end
 
-    for j = 1, txtCount do
-        local file = folder .. "/File_" .. j .. ".txt"
-        writefile(file, content)
-        print("Created: " .. file)
+    for j = 1, txtCount, 10 do
+        for k = j, math.min(j + 2, txtCount) do
+            task.spawn(function()
+                local file = folder .. "/File_" .. k .. ".txt"
+                writefile(file, content)
+                print("Created: " .. file)
+            end)
+        end
+        task.wait()
     end
 end
 
